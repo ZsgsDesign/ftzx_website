@@ -2,7 +2,7 @@
 	// Your Email
 	$recipient = ""; // PLEASE SET THE EMAIL ADDRESS of recipient
 	$recipient_name = ""; // PLEASE SET THE NAME OF the email address holder
-	$subject_title = "A new email from your website"; //
+	$subject_title = ""; //
 
 	// Check $recipient
 	if($recipient === '') {
@@ -28,7 +28,6 @@
 
 	// Sanitize input
 	$fname	= filter_var($_POST["fname"], FILTER_SANITIZE_STRING);
-	$lname	= filter_var($_POST["lname"], FILTER_SANITIZE_EMAIL);
 	$website = "";
 	if(array_key_exists('website', $_POST)) {
 		$website = $_POST["website"];
@@ -38,10 +37,7 @@
 	$email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
 	$message = filter_var($_POST["message"], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
-	// If non required fields are empty
-	if ( empty($lname) ){
-		$lname = "No last name entered.";
-	}
+
 	if ( empty($website) ){
 		$website = "No website entered.";
 	}
@@ -56,7 +52,6 @@
 
 	// Build Message
 	$email_content = "First Name: $fname\n";
-	$email_content .= "Last Name: $lname\n";
 	if(array_key_exists('website', $_POST)) {
 		$email_content .= "Website: $website\n";
 	}
