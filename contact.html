@@ -188,18 +188,46 @@
 				<section class="section-block replicable-content contact-2">
 					<div class="row">
 						<div class="column width-8 offset-2">
-							<h3 class="mb-50">留言</h3>
+							<h3 class="mb-50">给我们留言</h3>
 							<div class="contact-form-container">
 								<form class="contact-form" action="php/send-email.php" method="post" novalidate>
 									<div class="row">
 										<div class="column width-6">
-											<input type="text" name="fname" class="form-fname form-element rounded large" placeholder="署名*" tabindex="1" required>
+											<input type="text" name="fname" class="form-fname form-element rounded large" placeholder="名*" tabindex="1" required>
 										</div>
 										<div class="column width-6">
-											<input type="email" name="email" class="form-email form-element rounded large" placeholder="电子邮箱*" tabindex="3" required>
+											<input type="text" name="lname" class="form-lname form-element rounded large" placeholder="姓" tabindex="2">
 										</div>
-										<div class="column width-12">
-											<input type="text" name="website" class="form-website form-element rounded large" placeholder="网页" tabindex="4">
+										<div class="column width-6">
+											<input type="email" name="email" class="form-email form-element rounded large" placeholder="邮件地址*" tabindex="3" required>
+										</div>
+										<div class="column width-6">
+											<input type="text" name="website" class="form-website form-element rounded large" placeholder="网站" tabindex="4">
+										</div>
+										<div class="column width-6">
+											<div class="form-select form-element rounded large">
+												<select name="options" class="form-aux" data-label="Options" tabindex="5">
+													<option selected="selected" value="">预算</option>
+													<option value="">1000元以下</option>
+													<option value="">1000~2000元</option>
+													<option value="">2000~5000元</option>
+													<option value="">5000~7000元</option>
+													<option value="">7000元以上</option>
+												</select>
+											</div>
+										</div>
+										<div class="column width-6">
+											<div class="form-select form-element rounded large">
+												<select name="options" class="form-aux" data-label="Options" tabindex="5">
+													<option selected="selected" value="">你是从哪里知道方糖智行的？</option>
+													<option value="">朋友推荐</option>
+													<option value="">线上发现</option>
+													<option value="">学校推广</option>
+												</select>
+											</div>
+										</div>
+										<div class="column width-6">
+											<input type="text" name="honeypot" class="form-honeypot form-element large">
 										</div>
 									</div>
 									<div class="row">
@@ -209,11 +237,11 @@
 										<div class="column width-12">
 											<div class="field-wrapper pt-10 pb-10">
 											 	<input id="checkbox-1" class="form-element checkbox rounded" name="checkbox-1" type="checkbox">
-												<label for="checkbox-1" class="checkbox-label">同意接收回信</label>
+												<label for="checkbox-1" class="checkbox-label">我同意接收回信</label>
 											</div>
 										</div>
 										<div class="column width-12">
-											<input type="submit" value="留言" class="form-submit button rounded medium bkg-theme bkg-hover-green color-white color-hover-white">
+											<input type="submit" value="提交留言" class="form-submit button rounded medium bkg-theme bkg-hover-green color-white color-hover-white">
 										</div>
 									</div>
 								</form>
