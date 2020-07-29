@@ -1,33 +1,13 @@
 <?php
-	// Your Email
-	$recipient = ""; // PLEASE SET THE EMAIL ADDRESS of recipient
-	$recipient_name = ""; // PLEASE SET THE NAME OF the email address holder
-	$subject_title = ""; //
-
-	// Check $recipient
-	if($recipient === '') {
-		returnAndExitAjaxResponse(
-			constructAjaxResponseArray(
-				FALSE,
-				'RECIPIENT_IS_NOT_SET',
-				array('error_message'=> 'RECIPIENT email address is not set. Please configure the script.')
-			)
-		);
-	}
-
-	// Check for empty required field
-	if(!isset($_POST["email"]) || !isset($_POST["fname"]) || !isset($_POST["message"])) {
-		returnAndExitAjaxResponse(
-			constructAjaxResponseArray(
-				FALSE,
-				'MISSING_REQUIRED_FIELDS',
-				array('error_message'=> 'MISSING_REQUIRED_FIELDS should not be occurred.')
-			)
-		);
-	}
+	require_once './PHPMailer.php';
+	$config = require('./config.php');
 
 	// Sanitize input
 	$fname	= filter_var($_POST["fname"], FILTER_SANITIZE_STRING);
+	$lname = "";
+	if(array_key_exists('lname', $_POST)) {
+		$lname = $_POST["lname"];
+	}
 	$website = "";
 	if(array_key_exists('website', $_POST)) {
 		$website = $_POST["website"];
@@ -36,22 +16,15 @@
 	$website = filter_var($website, FILTER_VALIDATE_URL);
 	$email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
 	$message = filter_var($_POST["message"], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-
 	if ( empty($website) ){
 		$website = "No website entered.";
 	}
 
-	// Headers
-	$headers = 'From: '.$recipient_name.' <'.$recipient. ">\r\n";
-	$headers .= 'Reply-To: '.$email.'' . "\r\n";
-	$headers .= 'Return-Path: '.$recipient.'' . "\r\n";
-	$headers .= 'X-Mailer: PHP/' . phpversion();
-	$headers .= "Content-Transfer-Encoding: 8bit\n";
-	$headers .= "Content-Type: text/plain; charset=UTF-8\n";
-
 	// Build Message
 	$email_content = "First Name: $fname\n";
+	if(array_key_exists('lname', $_POST)) {
+		$email_content .= "Last Name: $lname\n";
+	}
 	if(array_key_exists('website', $_POST)) {
 		$email_content .= "Website: $website\n";
 	}
@@ -60,10 +33,30 @@
 	$email_content .= "CLIENT IP:\n".get_client_ip()."\n";
 	$email_content .= "HOST IP:\n".$_SERVER['SERVER_ADDR']."\n";
 
+	// Build PHPMailer
+	$mail = new PHPMailer(true);
+    $mail->IsSMTP();
+    $mail->CharSet='UTF-8';
+    $mail->SMTPAuth   = true;
+    $mail->SMTPSecure = "ssl";
+	$mail->Port       = $config['port'];
+    $mail->Host       = $config['host'];
+    $mail->Username   = $config['username'];
+    $mail->Password   = $config['password'];
+    $mail->From       = $config['from'];
+    $mail->FromName   = $config['fromName'];
+	$mail->AddAddress($email);
+    $mail->Subject  = "方糖智行网络科技有限公司 回复";
+	$mail->WordWrap   = 80;
+	$mail->Sender = $config['from'];
+	$mail->AddReplyTo($email);
+	$mail->Body = $email_content;
+    $result = $mail->Send();
+
 // Check if sent
 try {
-	$sendmailResult = mail($recipient, '=?utf-8?B?'.base64_encode($subject_title).'?=' , $email_content, $headers, '-f '.escapeshellarg($recipient));
-	if( $sendmailResult === TRUE ) {
+	
+	if( $result === TRUE ) {
 		returnAndExitAjaxResponse(
 			constructAjaxResponseArray(
 				TRUE
